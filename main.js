@@ -70,6 +70,6 @@ app.post('/generate', upload.single('logo'), async (req, res) => {
 });
 
 // Iniciar o servidor
-app.listen(3000, () => {
-  console.log('Servidor rodando em http://localhost:3000');
+app.listen(3002, () => {
+  console.log('Servidor rodando em http://localhost:3002');
 });
