@@ -1,10 +1,11 @@
+const dotenv = require('dotenv')
 const express = require('express');
 const multer = require('multer');
 const Jimp = require('jimp');
 const QRCode = require('qrcode');
 const path = require('path');
 const fs = require('fs');
-
+dotenv.config()
 const app = express();
 const upload = multer({ dest: 'logos/' });
 
@@ -68,8 +69,8 @@ app.post('/generate', upload.single('logo'), async (req, res) => {
     res.status(500).send('Erro ao gerar QR Code.');
   }
 });
-
+const PORT = process.env.PORT || '3333'
 // Iniciar o servidor
-app.listen(3002, () => {
-  console.log('Servidor rodando em http://localhost:3002');
+app.listen(PORT, () => {
+  console.log(`Servidor rodando em http://localhost:${PORT}`);
 });
