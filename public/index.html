@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerador de QR Code com Logo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+  <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-4xl">
+    <h1 class="text-3xl font-semibold text-center text-gray-800 mb-6">Gerador de QR Code com Logo</h1>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <!-- Formulário de Input -->
+      <div>
+        <form id="qrForm" class="space-y-6">
+          <div>
+            <label for="url" class="block text-gray-700">URL:</label>
+            <input type="text" name="url" id="url" placeholder="Digite a URL" required
+              class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+
+          <div>
+            <label for="logo" class="block text-gray-700">Logo:</label>
+            <input type="file" name="logo" id="logo" accept="image/*"
+              class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+
+          <div>
+            <label for="darkColor" class="block text-gray-700">Cor do QR Code:</label>
+            <input type="color" id="darkColor" name="darkColor" value="#000000"
+              class="w-16 p-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+
+          <div>
+            <label for="lightColor" class="block text-gray-700">Cor de fundo do QR Code:</label>
+            <input type="color" id="lightColor" name="lightColor" value="#ffffff"
+              class="w-16 p-1 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+
+          <button type="submit"
+            class="w-full py-3 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+            Gerar QR Code
+          </button>
+        </form>
+      </div>
+
+      <!-- QR Code Preview -->
+      <div class="flex items-center justify-center">
+        <div class="border p-6 rounded-lg shadow-md bg-gray-50 w-full max-w-xs">
+          <h2 class="text-center text-xl font-semibold text-gray-700 mb-4">QR Code Gerado</h2>
+          <img id="qrImage" alt="QR Code Gerado" class="max-w-full h-auto mx-auto hidden">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('qrForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      const formData = new FormData();
+      formData.append('url', document.getElementById('url').value);
+      formData.append('logo', document.getElementById('logo').files[0]);
+      formData.append('darkColor', document.getElementById('darkColor').value);
+      formData.append('lightColor', document.getElementById('lightColor').value);
+
+      try {
+        const response = await fetch('/generate', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const qrImage = document.getElementById('qrImage');
+          qrImage.src = URL.createObjectURL(await response.blob());
+          qrImage.classList.remove('hidden');
+        } else {
+          alert('Erro ao gerar QR Code.');
+        }
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao gerar QR Code.');
+      }
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,6 @@
+/node_modules
+.vscode
+.env
+*Zone.Identifier
+*.Identifier
+**/Zone.Identifier
